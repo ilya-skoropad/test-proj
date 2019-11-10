@@ -2,20 +2,15 @@
 
 class Table
 {
-    public static function create(FileContainer $file) : string
+    public static function create(array $data) : string
     {
-        $data = Excel::parseSheet($file->getPath(), 0);
-        $trans = Excel::parseSheet($file->getPath(), 1);
-
-        foreach($trans as $row) {
-            $data[$row[0] - 1][2] += $row[1];
-        }
-
         $markup = '<table>';
+
         foreach($data as $row) {
-            $markup .= '<tr><td class="cell-id">'.$data[$row[0] - 1][0].'</td><td class="cell-val">'
-                .$data[$row[0] - 1][1]. '</td><td class="cell-val">'
-                .$data[$row[0] - 1][2].'</td></tr>';
+            $markup .= '<tr><td class="cell-id">'
+                .$data[$row[0] - 1][Excel::ID].'</td><td class="cell-val">'
+                .$data[$row[0] - 1][Excel::NAME].'</td><td class="cell-val">'
+                .$data[$row[0] - 1][Excel::VALUE].'</td></tr>';
         }
         $markup .= '</table>';
 

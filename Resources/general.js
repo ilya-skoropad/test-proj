@@ -10,7 +10,6 @@ $(document).ready(function() {
             cache: false,
             processData: false,
             success: function(result) {
-                // alert(result);
                 $('.table').html(result);
             },
         });

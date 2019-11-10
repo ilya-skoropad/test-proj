@@ -6,13 +6,26 @@ class Core
     {
         try {
             $file = new FileContainer();
-            Validator::Validate($file);
+            Validator::validateFile($file);
 
         } catch(Exception $e) {
-            die("Упс, что-то пошло не так <br> одробнее тут: ".$e->getMessage());
+            die("Упс, что-то пошло не так <br> Подробнее тут: ".$e->getMessage());
         }
 
-        $data = Table::create($file);
+        try {
+            $data = Excel::parseSheet($file->getPath(), Excel::PAGE_ONE);
+            $trans = Excel::parseSheet($file->getPath(), Excel::PAGE_TWO);
+            Validator::validateData($data);
+
+        } catch (Exception $e) {
+            die("Упс, что-то пошло не так <br> Подробнее тут: ".$e->getMessage());
+        }
+
+        foreach($trans as $row) {
+            $data[$row[0] - 1][Excel::VALUE] += $row[Excel::TRANS];
+        }
+
+        $data = Table::create($data);
         echo $data;
     }
 }

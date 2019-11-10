@@ -1,31 +1,64 @@
-<?php 
+<?php
 
-class Validator 
+class Validator
 {
     // максимально доступный размер файла
-    const MAX_SIZE = 999999;
+    private const MAX_SIZE = 1024*8;
+    private const MIN_PAJES_COUNT = 2;
 
-    public static function validate(FileContainer $file)
+    public const WRONG_TYPE = 2; // Неверное расширение файла
+    public const WRONG_SIZE = 3; // Файл слишком большой
+    public const WRONG_COUNT = 4; // Слишком мало листов в книге Excel
+    public const WRONG_FIO = 5; // Неправильное ФИО
+    public const WRONG_CASH = 6; // Значение бюджета должно быть числовым
+
+
+    public static function validateFile(FileContainer $file) : bool
     {
-        if(!Validator::validateName($file->getName()))
-            throw new Exception("wrong type of file!", 2);
+        if(!Validator::validateFileName($file->getName()))
+            throw new Exception("wrong type of file!", self::WRONG_TYPE);
 
-        if(!Validator::validateSize($file->getSize()))
-            throw new Exception("wrong size of file!", 3);
+        if(!Validator::validateFileSize($file->getSize()))
+            throw new Exception("wrong size of file!", self::WRONG_SIZE);
+
+        if(Excel::getPajesCount($file->getPath()) < self::MIN_PAJES_COUNT)
+            throw new Exception("wrong list count of the Excel book!", self::WRONG_COUNT);
+
+        return true;
     }
 
-    private static function validateName(string $file) : bool
+    public static function validateData(array $data) : bool
+    {
+        foreach($data as $row) {
+            if(!is_float($data[$row[0] - 1][Excel::VALUE]))
+                throw new Exception("wrong cash!", self::WRONG_FIO);
+            if(!self::validateDataName($data[$row[0] - 1][Excel::NAME]))
+                throw new Exception("wrong ФИО!", self::WRONG_CASH);
+        }
+
+        return true;
+    }
+
+    private static function validateFileName(string $file) : bool
     {
         $regex = "/xlsx/i";
         preg_match($regex, $file, $matches);
         if(!empty($matches)) return true;
-    
+
+        return false;
+    }
+    private static function validateFileSize(int $size) : bool
+    {
+        if($size > self::MAX_SIZE) return true;
+
         return false;
     }
 
-    private static function validateSize(int $size) : bool
+    private static function validateDataName(string $name) : bool
     {
-        if($size < self::MAX_SIZE) return true;
+        $regex = "/([А-Я]{1}[а-я ]{1,9}|[А-Я]{1}[.]{0,1}){1,3}/";
+        preg_match($regex, $name, $matches);
+        if(!empty($matches)) return true;
 
         return false;
     }
