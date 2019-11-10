@@ -1,0 +1,45 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body {
+    background-color: rgb(237, 238, 240);
+}
+p {
+    margin-bottom: 5px;
+}
+
+.wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.bloc {
+    margin-bottom: 20px;
+}
+.bloc-head {
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+
+    background-color: white;
+    border: #555 solid 1px;
+    border-radius: 5px 5px 0px 0px;
+    padding: 5px;
+}
+.bloc-body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
+    background-color: white;
+    border-bottom: #555 solid 1px;
+    border-left: #555 solid 1px;
+    border-right: #555 solid 1px;
+    border-radius: 0px 0px 5px 5px;
+    padding: 5px;
+}
+
+.cell-id {
+    width: 20px;
+}
+.cell-val {
+    width: 150px;
+}
