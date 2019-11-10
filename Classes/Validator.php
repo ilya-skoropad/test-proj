@@ -4,8 +4,9 @@ class Validator
 {
     // максимально доступный размер файла
     private const MAX_SIZE = 1024*8;
-    private const MIN_PAJES_COUNT = 2;
+    private const MIN_PAGES_COUNT = 2;
 
+    public const NO_FILES = 1; // Файлы не передавались
     public const WRONG_TYPE = 2; // Неверное расширение файла
     public const WRONG_SIZE = 3; // Файл слишком большой
     public const WRONG_COUNT = 4; // Слишком мало листов в книге Excel
@@ -21,7 +22,7 @@ class Validator
         if(!Validator::validateFileSize($file->getSize()))
             throw new Exception("wrong size of file!", self::WRONG_SIZE);
 
-        if(Excel::getPajesCount($file->getPath()) < self::MIN_PAJES_COUNT)
+        if(Excel::getPagesCount($file->getPath()) < self::MIN_PAGES_COUNT)
             throw new Exception("wrong list count of the Excel book!", self::WRONG_COUNT);
 
         return true;

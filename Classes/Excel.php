@@ -20,7 +20,7 @@ class Excel
         return $sheet;
     }
 
-    public static function getPajesCount(string $file) : int
+    public static function getPagesCount(string $file) : int
     {
         $xls = PHPExcel_IOFactory::load($file);
         return $xls->getSheetCount();
