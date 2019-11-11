@@ -8,9 +8,6 @@ class FileContainer
 
     public function __construct()
     {
-        if(empty($_FILES)) 
-            throw new Exception("There is no files!", Validator::NO_FILES);
-
         $this->name = $_FILES['document']['name'];
         $this->size = $_FILES['document']['size'];
         $this->path = $_FILES['document']['tmp_name'];

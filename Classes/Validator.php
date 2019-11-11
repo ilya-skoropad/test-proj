@@ -14,15 +14,18 @@ class Validator
     public const WRONG_CASH = 6; // Значение бюджета должно быть числовым
 
 
-    public static function validateFile(FileContainer $file) : bool
+    public static function validateFile() : bool
     {
-        if(!Validator::validateFileName($file->getName()))
+        if(empty($_FILES))
+            throw new Exception("There is no files!", Validator::NO_FILES);
+
+        if(!Validator::validateFileName($_FILES['document']['name']))
             throw new Exception("wrong type of file!", self::WRONG_TYPE);
 
-        if(!Validator::validateFileSize($file->getSize()))
+        if(!Validator::validateFileSize($_FILES['document']['size']))
             throw new Exception("wrong size of file!", self::WRONG_SIZE);
 
-        if(Excel::getPagesCount($file->getPath()) < self::MIN_PAGES_COUNT)
+        if(Excel::getPagesCount($_FILES['document']['tmp_name']) < self::MIN_PAGES_COUNT)
             throw new Exception("wrong list count of the Excel book!", self::WRONG_COUNT);
 
         return true;

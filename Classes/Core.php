@@ -5,8 +5,8 @@ class Core
     public function init() : void
     {
         try {
+            Validator::validateFile();
             $file = new FileContainer();
-            Validator::validateFile($file);
 
         } catch(Exception $e) {
             die("Упс, что-то пошло не так <br> Подробнее тут: ".$e->getMessage());
